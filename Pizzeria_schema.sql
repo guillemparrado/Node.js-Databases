@@ -18,12 +18,12 @@ CREATE TABLE locality
 
 -- phone_number és charchar perquè pot tenir guions, parèntesis, etc.
 -- A partir d'aquí poso sempre not null a no ser que s'especifiqui el contrari.
--- Dubte: Cal posar FK a província? no es podria fer un walk des de localitat?
+-- Dubte: Cal posar FK a província? no es podria fer un join des de localitat?
 CREATE TABLE client
 (
     id           INT PRIMARY KEY AUTO_INCREMENT,
     name         VARCHAR(30) NOT NULL,
-    surname      VARCHAR(50) NOT NULL,
+    surnames     VARCHAR(50) NOT NULL,
     address      VARCHAR(50) NOT NULL,
     postal_code  INT(5)      NOT NULL,
     locality     INT         NOT NULL,
@@ -49,10 +49,10 @@ CREATE TABLE employee
     id              INT PRIMARY KEY AUTO_INCREMENT,
     store           INT         NOT NULL,
     name            VARCHAR(30) NOT NULL,
-    surname         VARCHAR(50) NOT NULL,
+    surnames        VARCHAR(50) NOT NULL,
     nif             VARCHAR(9)  NOT NULL,
     phone_number    VARCHAR(20) NOT NULL,
-    job_description ENUM ('cooker', 'delivery_man'),
+    job_description ENUM ('cooker', 'delivery'),
     CONSTRAINT fk_employee_store FOREIGN KEY (store) REFERENCES store (id)
 );
 
@@ -68,23 +68,21 @@ CREATE TABLE home_delivery
 
 -- "order" (comanda en anglès) és sql reserved word, faig servir "sale".
 -- "price" és decimal perquè float pot donar problemes d'exactitut en decimals quan es treballa en moneda. Li he posat 3 dígits de part entera i 2 de decimal.
+-- si delivery és null, l'entrega va ser en botiga, mentre que si apunta a un home_delivery va ser a domicili
+-- "client" pot ser null per compres a botiga per exemple en què no tenim dades de la identitat dels compradors
 -- TODO No se com fer que tingui com a mínim una línia de producte (== mínim un sale_line fk apuntant cada sale perquè pugui existir)
 CREATE TABLE sale
 (
-    id            INT PRIMARY KEY AUTO_INCREMENT,
-    dt            DATETIME      NOT NULL,
-    client        INT           NOT NULL,
-    delivery      ENUM ('home_address', 'store_pickup'),
-    total_price   DECIMAL(5, 2) NOT NULL,
-    store         INT           NOT NULL,
-    home_delivery INT,
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    dt          DATETIME      NOT NULL,
+    client      INT,
+    delivery    INT,
+    total_price DECIMAL(5, 2) NOT NULL,
+    store       INT           NOT NULL,
     CONSTRAINT fk_sale_client FOREIGN KEY (CLIENT) REFERENCES CLIENT (id),
     -- CONSTRAINT check_sale_min_1_product CHECK ( ...? ),
     CONSTRAINT fk_sale_store FOREIGN KEY (store) REFERENCES store (id),
-    CONSTRAINT fk_sale_home_delivery FOREIGN KEY (home_delivery) REFERENCES home_delivery (id),
-    CONSTRAINT check_sale_home_delivery CHECK (
-            (NOT (delivery = 'home_address') AND home_delivery IS NULL) OR
-            (delivery = 'home_address' AND home_delivery IS NOT NULL))
+    CONSTRAINT fk_sale_home_delivery FOREIGN KEY (delivery) REFERENCES home_delivery (id)
 );
 
 CREATE TABLE pizza_category
@@ -92,12 +90,13 @@ CREATE TABLE pizza_category
     id   INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(30) NOT NULL
 );
+
 CREATE TABLE product
 (
     id             INT PRIMARY KEY AUTO_INCREMENT,
     type           ENUM ('pizza', 'burger', 'beverage'),
     name           VARCHAR(30)   NOT NULL,
-    description    VARCHAR(100)  NOT NULL,
+    description    TEXT          NOT NULL,
     image          BLOB          NOT NULL,
     price          DECIMAL(5, 2) NOT NULL,
     pizza_category INT,
