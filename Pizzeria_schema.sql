@@ -56,7 +56,7 @@ CREATE TABLE employee
     CONSTRAINT fk_employee_store FOREIGN KEY (store) REFERENCES store (id)
 );
 
--- TODO faltaria comprovar que employee té job_description = 'delivery_man'
+-- TODO faltaria comprovar que employee té job_description = 'delivery'
 CREATE TABLE home_delivery
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
