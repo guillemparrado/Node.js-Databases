@@ -1,2 +1,5 @@
 # IDE
 .idea
+
+# Backups Projecte MySQL Workbench
+*/*.bak
