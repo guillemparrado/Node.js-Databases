@@ -1,0 +1,13 @@
+{
+  "name": "mongodb-estructura",
+  "version": "1.0.0",
+  "description": "Tasca 3 Sprint 2 Node.js Bootcamp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillempado/mongodb-estructura.git"
+  },
+  "author": "Guillem Parrado",
+  "dependencies": {
+    "mongodb": "^4.3.0"
+  }
+}
