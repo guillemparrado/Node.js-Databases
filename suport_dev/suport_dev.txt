@@ -1,6 +1,6 @@
 Aplico la mateixa configuració que a mongodb-estructura (ara només hi ha un file, faig hard link de consola en comptes de junction):
 
-    - mklink /h "C:\Users\guillem\WebstormProjects\mongodb-queries\restaurant.js" "C:\Users\guillem\AppData\Roaming\JetBrains\WebStorm2021.3\consoles\db\1302e4c2-3efb-4b0d-9fb3-fea9f2a3356e\restaurant.js"
+    - mklink /h "C:\Users\guillem\WebstormProjects\mongodb-queries\restaurants.js" "C:\Users\guillem\AppData\Roaming\JetBrains\WebStorm2021.3\consoles\db\1302e4c2-3efb-4b0d-9fb3-fea9f2a3356e\restaurants.js"
 
     - Afegeixo com a llibreria (enabled) pq no llegeixi errors
 

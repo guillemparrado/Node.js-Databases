@@ -1,0 +1,10 @@
+db.restaurants.find();
+db.restaurants.find({}, { restaurant_id: true, name: true, borough: true, cuisine: true, });
+db.restaurants.find({}, { _id: false, restaurant_id: true, name: true, borough: true, cuisine: true, });
+db.restaurants.find({}, { _id: false, restaurant_id: true, name: true, borough: true, address: { zipcode: true } });
+db.restaurants.find({ borough: "Bronx" });
+db.restaurants.find({ borough: "Bronx" }).limit(5);
+db.restaurants.find({ borough: "Bronx" }).skip(5) .limit(5);
+db.restaurants.find({ "grades.score": { $gt: 90 } });
+db.restaurants.find({ "grades.score": { $gt: 80, $lt: 100 } });
+db.restaurants.find({ "address.coord.0": {$lt: -95.754168} });
