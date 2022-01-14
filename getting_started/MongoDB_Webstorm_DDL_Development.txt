@@ -22,3 +22,7 @@ UPDATES:
         mklink /j "C:\Users\guillem\WebstormProjects\mongodb-estructura\ddl" "C:\Users\guillem\AppData\Roaming\JetBrains\WebStorm2021.3\consoles\db\c2564d12-2fa6-470e-b3d4-ebb79660f9b3".
     - Recorda a posar tot el directori ddl com a library perquè no marqui els arxius amb errors.
     - Per passar de sql anterior a mongo, també m'ha anat bé crear scratches a l'ide (a més de consoles), un tables.sql i un data.sql amb taules i inserts d'optica.sql (copiar i enganxar d'entrega anterior) i tenir al costat com arxiu editable per anar passant d'sql a mongodb.
+
+
+UPDATE:
+    - Cal deixar alguna línia (p.e. de comentari) a les consoles obertes pq IDE no les elimini automàticament en reiniciar (si estan buides, encara que les haguem reanomenat, l'IDE les elimina + com tenim junction, també les elimina del repositori -> no es poden tenir arxius de consola buits).
