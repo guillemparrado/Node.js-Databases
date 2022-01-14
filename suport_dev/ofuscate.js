@@ -1,6 +1,6 @@
 fs = require('fs')
 const FILEPATHS = Object.freeze([
-    "../restaurant.js"
+    "../restaurants.js"
 ]);
 
 function ofuscate(data) {
@@ -9,6 +9,8 @@ function ofuscate(data) {
         .replace(/use.*/g, '')
         // Elimina comentaris
         .replace(/\/\/.*/g, '')
+        // Elimina també multiline comments -- Font per traversar noves línies (adaptat per treballar en \r\n i \n): https://stackoverflow.com/a/159140
+        .replace(/\/\*((.|\r\n|\n)*)\*\//g, '')
         // Substitueix nova línia per espai
         .replace(/\r\n/g, ' ')
         // Hi ha sistemes que fan servir només \n en comptes de \r\n
