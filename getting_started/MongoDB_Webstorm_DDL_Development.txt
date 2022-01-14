@@ -1,0 +1,17 @@
+Per crear els arxius a Webstorm i que siguin completament interpretats.
+
+Problema:
+1) per mongo en comptes d'sql, el plugin de databases només interpreta bé si el query console es troba a les carpetes de config de webstorm (accessible des del plugin de Project / Scratches and Consoles / Database Consoles).
+2) En copiar el file o crear-lo de zero dins del repositori, es pot fer “attach session” que suposo que deu funcionar bé per SQL però per mongo es trenca.
+3) El pot canviar nom i extensió del query console per defecte i això no trenca la interpretació.
+
+Propostes de solució:
+1) Crear softlink i que git el segueixi
+2) Crear hard link
+
+Aplico solució 2:
+1) hard links en windows funcionen al revés q linux, és (dst, src) i no (src, dst): https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/mklink):
+    > mklink /j "Link" "Source Target"      # On "Link" és dst i "Source Target" és src.
+2) Faig el link des de la consola que funciona al repositori:
+    > mklink /h "C:\Users\guillem\WebstormProjects\mongodb-estructura\optica.js" "C:\Users\guillem\AppData\Roaming\JetBrains\WebStorm2021.3\consoles\db\c2564d12-2fa6-470e-b3d4-ebb79660f9b3\optica.js".
+3) Resultat: El file apareix a repositori on toca i queda vinculat a git, però va donant errors perquè sintaxi no és correcta per un fitxer de JS. Solució: afegeixo com a library (habilitada → enabled): això fa que deixi de marcar l'arxiu amb errors a project tree (encara que si l'obro els continua marcant). Finalment, tanco file, col·lapso carpeta del projecte i treballo amb consola de webstorm on tot funciona. A l'hora de fer commit, com és hard link estaré modificant directament els files target del repo: només caldrà afegir file de repo a source control.
