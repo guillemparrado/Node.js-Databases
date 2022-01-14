@@ -15,3 +15,10 @@ Aplico solució 2:
 2) Faig el link des de la consola que funciona al repositori:
     > mklink /h "C:\Users\guillem\WebstormProjects\mongodb-estructura\optica.js" "C:\Users\guillem\AppData\Roaming\JetBrains\WebStorm2021.3\consoles\db\c2564d12-2fa6-470e-b3d4-ebb79660f9b3\optica.js".
 3) Resultat: El file apareix a repositori on toca i queda vinculat a git, però va donant errors perquè sintaxi no és correcta per un fitxer de JS. Solució: afegeixo com a library (habilitada → enabled): això fa que deixi de marcar l'arxiu amb errors a project tree (encara que si l'obro els continua marcant). Finalment, tanco file, col·lapso carpeta del projecte i treballo amb consola de webstorm on tot funciona. A l'hora de fer commit, com és hard link estaré modificant directament els files target del repo: només caldrà afegir file de repo a source control.
+
+
+UPDATES:
+    - Com que tindré vàries consoles i arxius de target, surt més a compte crear un junction (hard link per folder) de carpeta de consoles a carpeta ./ddl per gestionar el 100% dels arxius que contingui des de carpeta de consoles de l'IDE:
+        mklink /j "C:\Users\guillem\WebstormProjects\mongodb-estructura\ddl" "C:\Users\guillem\AppData\Roaming\JetBrains\WebStorm2021.3\consoles\db\c2564d12-2fa6-470e-b3d4-ebb79660f9b3".
+    - Recorda a posar tot el directori ddl com a library perquè no marqui els arxius amb errors.
+    - Per passar de sql anterior a mongo, també m'ha anat bé crear scratches a l'ide (a més de consoles), un tables.sql i un data.sql amb taules i inserts d'optica.sql (copiar i enganxar d'entrega anterior) i tenir al costat com arxiu editable per anar passant d'sql a mongodb.
