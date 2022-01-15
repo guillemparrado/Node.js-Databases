@@ -250,4 +250,150 @@ db.restaurants.find({
 });
 
 
+// 21
+// OBSERVACIÓ: Si és Seafood no pot ser Chinese o American per defició, no cal filtrar-ho a la consulta
+db.restaurants.find({
+    cuisine: 'Seafood',
+    name: {
+        $not: {
+            $regex: '^Wil'
+        }
+    }
+}, {
+    restaurant_id: true,
+    name: true,
+    borough: true,
+    cuisine: true
+});
 
+
+// 22
+// OBSERVACIÓ: entenc per la consulta 23 que en aquesta es demana que els valors dels 3 camps coincideixin en un mateix grade, el qual pot ser qualsevol de l'array
+db.restaurants.find({
+    grades: {
+        $elemMatch: {
+            grade: 'A',
+            score: 11,
+            date: new ISODate("2014-08-11T00:00:00Z")
+        }
+    }
+}, {
+    restaurant_id: true,
+    name: true,
+    grades: true
+});
+
+
+// 23
+// Font: https://docs.mongodb.com/manual/tutorial/query-array-of-documents/
+db.restaurants.find({
+    "grades.1.grade": 'A',
+    "grades.1.score": 9,
+    "grades.1.date": new ISODate("2014-08-11T00:00:00Z")
+}, {
+    restaurant_id: true,
+    name: true,
+    grades: true
+});
+
+
+// 24
+db.restaurants.find({
+    "address.coord.1": {
+            $gte: 42,
+            $lte: 52
+        }
+}, {
+    restaurant_id: true,
+    name: true,
+    address: true
+});
+
+// 25
+db.restaurants.find().sort({
+    name: 1
+});
+
+
+// 26
+db.restaurants.find().sort({
+    name: -1
+});
+
+
+// 27
+db.restaurants.find().sort({
+    cuisine: 1,
+    borough: -1
+});
+
+
+// 28
+// Font: https://docs.mongodb.com/manual/reference/operator/query/exists/
+// OBSERVACIÓ: en comptes de fer servir $exists, es podria donar el cas que el field existís però estigués buit... Tampoc val si existeix però l'string que conté està buit o només té espais, caràcters de nova línia, símbols, etc. Una possible condició per acceptar que contenen el carrer seria que el field existeixi i que a més l'string del camp contingui alguna lletra:
+db.restaurants.find({
+    "address.street": {
+        $regex: '[a-zA-Z]'
+    }
+});
+
+
+// 29
+// Font: https://docs.mongodb.com/manual/reference/operator/query/type/#mongodb-query-op.-type
+db.restaurants.find({
+    "address.coord.0": {
+        $type: 'double',
+    },
+    "address.coord.1": {
+        $type: 'double',
+    }
+});
+
+
+// 30
+// Font: https://docs.mongodb.com/manual/reference/operator/query/mod/#mongodb-query-op.-mod
+// Font: https://sqlserverguides.com/mongodb-return-only-matching-array-elements/
+// COMENTARI: El que fa és retornar el grade que ha fet match i no tot l'array de grades
+db.restaurants.find({
+    "grades.score": {
+        $mod: [7, 0]
+    }
+}, {
+    restaurant_id: true,
+    name: true,
+    grades: {
+        $elemMatch: {
+            score: {
+                $mod: [7, 0]
+            },
+        }
+    }
+});
+
+
+// 31
+db.restaurants.find({
+    name: {
+        $regex: 'mon'
+    }
+},{
+    name: true,
+    borough: true,
+    "address.coord": true,
+    cuisine: true
+
+});
+
+
+// 32
+db.restaurants.find({
+    name: {
+        $regex: '^Mad'
+    }
+},{
+    name: true,
+    borough: true,
+    "address.coord": true,
+    cuisine: true
+
+});

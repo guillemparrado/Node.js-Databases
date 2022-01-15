@@ -18,3 +18,15 @@ db.restaurants.find({ borough: 'Bronx', $or: [ { cuisine: 'American ' }, { cuisi
 db.restaurants.find({ borough: { $regex: 'Staten Island|Queens|Bronx|Brooklyn' } }, { restaurant_id: true, name: true, borough: true, cuisine: true });
 db.restaurants.find({ borough: { $not: { $regex: 'Staten Island|Queens|Bronx|Brooklyn' } } }, { restaurant_id: true, name: true, borough: true, cuisine: true });
 db.restaurants.find({ "grades.score": { $lt: 10 } }, { restaurant_id: true, name: true, borough: true, cuisine: true });
+db.restaurants.find({ cuisine: 'Seafood', name: { $not: { $regex: '^Wil' } } }, { restaurant_id: true, name: true, borough: true, cuisine: true });
+db.restaurants.find({ grades: { $elemMatch: { grade: 'A', score: 11, date: new ISODate("2014-08-11T00:00:00Z") } } }, { restaurant_id: true, name: true, grades: true });
+db.restaurants.find({ "grades.1.grade": 'A', "grades.1.score": 9, "grades.1.date": new ISODate("2014-08-11T00:00:00Z") }, { restaurant_id: true, name: true, grades: true });
+db.restaurants.find({ "address.coord.1": { $gte: 42, $lte: 52 } }, { restaurant_id: true, name: true, address: true });
+db.restaurants.find().sort({ name: 1 });
+db.restaurants.find().sort({ name: -1 });
+db.restaurants.find().sort({ cuisine: 1, borough: -1 });
+db.restaurants.find({ "address.street": { $regex: '[a-zA-Z]' } });
+db.restaurants.find({ "address.coord.0": { $type: 'double', }, "address.coord.1": { $type: 'double', } });
+db.restaurants.find({ "grades.score": { $mod: [7, 0] } }, { restaurant_id: true, name: true, grades: { $elemMatch: { score: { $mod: [7, 0] }, } } });
+db.restaurants.find({ name: { $regex: 'mon' } },{ name: true, borough: true, "address.coord": true, cuisine: true });
+db.restaurants.find({ name: { $regex: '^Mad' } },{ name: true, borough: true, "address.coord": true, cuisine: true });
