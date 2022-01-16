@@ -1,0 +1,27 @@
+Per crear ERD a partir de database existent:
+
+- Faig servir DBSchema: https://dbschema.com/editions.html. Permet connectar a database i fer reverse engineering de les bases de dades i col·leccions que conté (igual que MySQL Workbench per connexions MySQL). S'instal·la en demo pro per 15 dies, però el reverse engineering feature sembla que continuarà formant part del downgrade a a DbSchema Free quan acabin els 15 dies de trial.
+
+- Les puc importar totes d'un sol cop: m'espero a tenir totes les bases de dades dissenyades per generar el projecte i les imatges ERD.
+
+- L'export d'imatges del projecte no funciona bé (crea línies horitzontals on no toca) però la vista dins del projecte és correcta: exporto vistes per captura de pantalla. Com alternativa, mentre duri la versió pro puc fer export en HTML5 que queda genial.
+
+- COMPTE: No genera bé el nom de les col·leccions: cal corregir manualment abans d'exportar El virtual relationship tampoc el fa bé i s'han de corregir: per default de glasses a provider la referència hauria de sortir de l'objecte encastat i surt de glasses directament --> No he pogut corregir l'origen de l'enllaç.
+
+- Provo Moon Modeler: molt millor però no puc fer export sense watermarks.
+
+- DataGrip: no fa ERD sinó UML + no detecta Virtual foreign keys tot i que estan activades
+
+- Solució DBSchema: DBSchema en realitat té tota la info que cal. Al costat de glasses.brand.provider_id per exemple hi ha un símbol de fletxa indicant que és virtual foreign key, el mateix passa amb glasses.sale.client_id. Encara que a l'ERD la relació surti de glasses, després marca les claus als nested objects + es podria argumentar que té sentit que les relacions siguin d'una col·lecció a una altra, estigui la clau en un field propi de l'objecte de la col·lecció o d'algun objecte encastat d'aquest objecte. No m'agrada però és l'única solució community que ho té tot. Caldrà posar un comentari per indicar-ho.
+
+- Resum de solució DBSchema:
+    1) DBSchema connectar a mongodb i reverse engineering de totes les bases de dades en un sol document de projecte,
+    2) generar html5 per cada una d'elles, posant el nom correcte a les col·leccions + comentari sobre dibuix de virtual foreign keys (ni que sigui a primer diagrama: òptica) + nom de base de dades correcte a connexió a l'hora d'exportar.
+
+- Nova Solució:
+    1) de Moon Modeler em queden 9 dies de trial i és el que millor output dona encara que tingui watermark, trio això de moment, intento acabar abans que caduqui i ja veuré que faig si l'he de fer servir després de correccions quan ja hagi caducat.
+    2) COMPTE: els datatypes dels fields no estan bé, caldrà repassar-los tot i fer a ma.
+
+- Solució final:
+    1) Millorat layout per DBSchema (Layout >> Layout Properties) i exportat a html + png: entrega queda millor amb html (queden 15 dies de prova) però quan se m'acabi podré exportar a png. Perquè surti bé el png cal fer Model >> Appearance i triar algun model com Oxygen o Caspian. L'output no s'acaba de veure bé (zones esborronades) però tota la info es pot llegir i el model de dades queda clar.
+    2) IMPORTANT: Caldrà repassar tots els datatypes i donar explicació que la creueta al ppi de cada field significa "not null".

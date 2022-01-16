@@ -11,7 +11,7 @@
     UPDATE: De provider també tenim dades exhaustives i segurament ens interessi gestionar-les a part + ocupen la major part de glasses quan les encastem i es van replicant per cada item d'inventari que tinguem. Per això, externalitzo a col·lecció provider i vinculo per referència.
 */
 
-use Optica
+use optica
 db.dropDatabase()
 // show collections
 
