@@ -2,7 +2,7 @@
 
 use pizzeria
 db.dropDatabase()
-show collections
+// show collections
 
 // CREATE COLLECTIONS
 db.createCollection('client');
@@ -20,17 +20,17 @@ db.createCollection('sale');
 const clients = [
     {
         _id: 1,
-        name: ,
-        surnames: ,
-        phone_number: ,
-        address: ,
-        postal_code: ,
+        name: 'Omar',
+        surnames: 'Olmedo Ferrer',
+        phone_number: '555-555-555',
+        address: 'Gran Via 123',
+        postal_code: '08080',
         locality: {
-            id: ,
-            name: ,
+            id: 1,
+            name:'Barcelona',
             province: {
-                id: ,
-                name:
+                id: 1,
+                name: 'Barcelona'
             }
         },
     }
@@ -38,15 +38,27 @@ const clients = [
 
 const stores = [
     {
-        _id: ,
-        address: ,
-        postal_code: ,
+        _id: 1,
+        address: 'Torrent de la vil·la 12',
+        postal_code: '08080',
         locality: {
-            id: ,
-            name: ,
+            id: 1,
+            name:'Barcelona',
             province: {
-                id: ,
-                name:
+                id: 1,
+                name: 'Barcelona'
+            }
+        },
+    }, {
+        _id: 2,
+        address: 'Carrer de la fàbrica 123',
+        postal_code: '08202',
+        locality: {
+            id: 1,
+            name:'Sabadell',
+            province: {
+                id: 1,
+                name: 'Barcelona'
             }
         },
     }
@@ -54,16 +66,23 @@ const stores = [
 
 const employees = [
     {
-        _id: ,
-        name: ,
-        surnames: ,
-        nif: ,
-        phone_number: ,
-        job_description: ,
-        store_id: ,
+        _id: 1,
+        name: 'Agustí',
+        surnames: 'Pérez Simó',
+        nif: '12345678X',
+        phone_number: '555-555-555',
+        job_description: 'cooker',
+        store_id: 1,
+    }, {
+        _id: 2,
+        name: 'Sònia',
+        surnames: 'Domínguez Guatlla',
+        nif: '98765432X',
+        phone_number: '666-666-666',
+        job_description: 'delivery',
+        store_id: 1,
     }
 ];
-
 
 
 // Cal mantenir una col·lecció de productes, per exemple per mostrar-los per pantalla al sistema per tal de poder-los seleccionar per una nova venda
@@ -71,60 +90,110 @@ const employees = [
 // Pizza_category és un camp opcional
 // Agrupo tota la info de product type dins de type per tenir tota la complexitat relacionada encapsulada sota un sol camp a product.
 const products = [
+
     {
-        _id: ,
+        _id: 1,
         type: {
-            type: 'hamburguer'
-        },
-        name: ,
-        description: ,
-        image: ,
-        price: ,
-    },
-    {
-        _id: ,
-        type: {
-            type: 'pizza',
+            name: 'pizza',
             category: {
-                id: ,
-                name:
+                id: 1,
+                name: 'Clàssica'
             }
         },
-        name: ,
-        description: ,
-        image: ,
-        price: ,
-    }
+        name: 'Carbonara',
+        description: 'Crema fresca, Mozzarella, Bacon, Xampinyons i Ceba',
+        image: 'TLdnH2ATSTl68YkTyMJwPLnGbz1xxKgLuJP...NeUWOUVIkfj/+dveHT+tUutfdtWVqr7fma5xHX9Ns1==',
+        price: 14.25,
+    },
+    {
+        _id: 2,
+        type: {
+            name: 'pizza',
+            category: {
+                id: 2,
+                name: 'Deluxe'
+            }
+        },
+        name: 'Cremozza BBQ',
+        description: 'Crema fresca, Mozzarella, Bacon, Pollastre a la graella,Ceba i Salsa barbacoa',
+        image: 'TLdnH2ATSTl68YkTyMJwPLnGbz1xxKgLuJP...NeUWOUVIkfj/+dveHT+tUutfdtWVqr7fma5xHX9Ns1==',
+        price: 21.75
+    },
+    {
+        _id: 3,
+        type: {
+            name: 'beverage'
+        },
+        name: 'Aigua',
+        description: 'Mineral Natural',
+        image: 'TLdnH2ATSTl68YkTyMJwPLnGbz1xxKgLuJP...NeUWOUVIkfj/+dveHT+tUutfdtWVqr7fma5xHX9Ns1==',
+        price: 1
+    },{
+        _id: 4,
+        type: {
+            name: 'beverage'
+        },
+        name: 'Cola-Cola',
+        description: 'Llauna',
+        image: 'TLdnH2ATSTl68YkTyMJwPLnGbz1xxKgLuJP...NeUWOUVIkfj/+dveHT+tUutfdtWVqr7fma5xHX9Ns1==',
+        price: 1.5
+    },{
+        _id: 5,
+        type: {
+            name: 'beverage'
+        },
+        name: 'Estrella Damm',
+        description: 'Llauna',
+        image: 'TLdnH2ATSTl68YkTyMJwPLnGbz1xxKgLuJP...NeUWOUVIkfj/+dveHT+tUutfdtWVqr7fma5xHX9Ns1==',
+        price: 1.5
+    },
 ];
-
 
 
 // Aplico mateix sistema d'_id amb sentit de negoci
 // Com a SQL, delivery és null quan la comanda sigui per recollir a botiga
 const sales = [
+    // Sale d'una pizza carbonara i una cervesa a botiga barcelona, entrega a domicili efectuada per l'empleada 2
     {
         _id: 1,
         client_id: 1,
-        datetime: ,
-        total_price: ,
-        store_id: ,
+        datetime: '2020-01-01 20:15',
+        total_price: 15.75,
+        store_id: 1,
         delivery: {
-            employee_id: ,
-            datetime: ,
+            employee_id: 2,
+            datetime: '2020-01-01 20:45',
         },
+        sale_lines: [
+            {
+                product_id: 1,
+                quantity: 1,
+                line_price: 14.25
+            },
+            {
+                product_id: 5,
+                quantity: 1,
+                line_price: 1.5
+            },
+        ]
+    },
+    // Sale de 6 Coca-coles a botiga barcelona, entrega a botiga
+    {
+        _id: 2,
+        client_id: null,
+        datetime: '2021-01-03 18:12',
+        total_price: 9,
+        store_id: 1,
+        delivery: null,
         items: [
             {
-                product_id: ,
-                quantity: ,
-            },
-            {
-                product_id: ,
-                quantity: ,
-            },
+                product_id: 4,
+                quantity: 6,
+                line_price: 9
+            }
         ]
     }
 ];
-
 
 // INSERTS
 
