@@ -8,7 +8,6 @@ db.dropDatabase()
 db.createCollection('user');
 db.createCollection('tag');
 db.createCollection('video');
-db.createCollection('channel');
 db.createCollection('playlist');
 
 
@@ -16,7 +15,6 @@ db.createCollection('playlist');
 
 const user_ids = [ObjectId(), ObjectId()];
 const video_ids = [ObjectId()];
-const channel_ids = [ObjectId()];
 const playlist_ids = [ObjectId()];
 const tag_ids = [ObjectId(), ObjectId(), ObjectId()];
 
@@ -35,9 +33,9 @@ const users = [
         gender: null,
         country: 'Spain',
         postal_code: '08080',
-        published_channels: null,
+        channel: null,
         subscribed_channels: [
-            channel_ids[0]
+            user_ids[1]
         ],
         published_playlists: null,
         subscribed_playlists: [
@@ -54,9 +52,17 @@ const users = [
         gender: 'male',
         country: 'USA',
         postal_code: '12345',
-        published_channels: [
-            channel_ids[0]
-        ],
+        // Guardo els usuaris que s'han subscrit també aquí (navegació bidireccional, usuari -> canals a què subscrit però també canal -> usuaris subscrits) per poder gestionar l'enviament de notificacions des del canal als subscriptors sense haver de consultar a tota la base de dades de Youtube de billons d'usuaris per saber quins estan subscrits al canal cada cop que es vulgui enviar l'inici d'un broadcasting per exemple
+        // Com que només pot haver-hi un canal per usuari, té sentit assignar-li la mateixa id que a l'usuari per assegurar que sigui única
+        channel: {
+            id: user_ids[1],
+            name: 'Youtube founders',
+            description: 'Official channel from the founders of youtube',
+            creation_date: '2007-03-21',
+            subscribed_users: [
+                user_ids[0]
+            ]
+        },
         subscribed_channels: null,
         published_playlists: [
             playlist_ids[0]
@@ -132,23 +138,9 @@ const videos = [
     }
 ];
 
-// Torno a aprofitar la id de mongo
-// Guardo els usuaris que s'han subscrit també aquí (navegació bidireccional, usuari -> canals a què subscrit però també canal -> usuaris subscrits) per poder gestionar l'enviament de notificacions des del canal als subscriptors sense haver de consultar a tota la base de dades de Youtube de billons d'usuaris per saber quins estan subscrits al canal cada cop que es vulgui enviar l'inici d'un broadcasting per exemple
-const channels = [
-    {
-        _id: channel_ids[0],
-        author_id: users[1],
-        name: 'Youtube founders',
-        description: 'Official channel from the founders of youtube',
-        creation_date: '2007-03-21',
-        subscribed_users: [
-            user_ids[0]
-        ]
-    }
-];
 
 // Torno a aprofitar la id de mongo
-// Penso que té sentit que existeixi de manera independent de l'autor perquè té "vida pròpia" relacionada amb la resta d'usuaris
+// Penso que té sentit que existeixi de manera independent de l'autor perquè té "vida pròpia" relacionada amb la resta d'usuaris + relació amb l'autor és d'un a molts
 const playlists = [
     {
         _id: playlist_ids[0],
@@ -167,7 +159,6 @@ const playlists = [
 db.user.insertMany(users);
 db.tag.insertMany(tags);
 db.video.insertMany(videos);
-db.channel.insertMany(channels);
 db.playlist.insertMany(playlists);
 
 // INDEXES
