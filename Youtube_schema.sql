@@ -3,17 +3,27 @@ CREATE DATABASE youtube CHARACTER SET utf8mb4;
 USE youtube;
 
 
+/*
+ Observacions:
+    - A partir del merge de la taula channel dins de user, els diferents camps de channel són opcionals perquè no tots els usuaris tenen un channel creat.
+    - channel_id necessitarà un índex per poder buscar canals des de l'aplicació, però  no el creo a part perquè keyword UNIQUE ja l'implementa.
+ */
 CREATE TABLE user
 (
-    id          INT PRIMARY KEY AUTO_INCREMENT,
-    email       VARCHAR(50)                           NOT NULL,
-    password    VARCHAR(30)                           NOT NULL,
-    name        VARCHAR(30)                           NOT NULL,
-    birth       DATE                                  NOT NULL,
-    gender      ENUM ('male', 'female', 'non-binary') NOT NULL,
-    country     VARCHAR(30)                           NOT NULL,
-    postal_code VARCHAR(10)                           NOT NULL
+    id                  INT PRIMARY KEY AUTO_INCREMENT,
+    email               VARCHAR(50)                           NOT NULL,
+    password            VARCHAR(30)                           NOT NULL,
+    name                VARCHAR(30)                           NOT NULL,
+    birth               DATE                                  NOT NULL,
+    gender              ENUM ('male', 'female', 'non-binary') NOT NULL,
+    country             VARCHAR(30)                           NOT NULL,
+    postal_code         VARCHAR(10)                           NOT NULL,
+    channel_id          INT UNIQUE,
+    channel_name        VARCHAR(30),
+    channel_description TEXT,
+    channel_creation    DATE
 );
+
 CREATE TABLE video
 (
     id                  INT PRIMARY KEY AUTO_INCREMENT,
@@ -41,17 +51,6 @@ CREATE TABLE video_tag
     CONSTRAINT fk_video_tag_video FOREIGN KEY (video) REFERENCES video (id)
 );
 
-CREATE TABLE channel
-(
-    id            INT PRIMARY KEY AUTO_INCREMENT,
-    name          VARCHAR(30) NOT NULL,
-    description   TEXT        NOT NULL,
-    creation_date DATE        NOT NULL,
-    author        INT         NOT NULL,
-    CONSTRAINT fk_channel_author FOREIGN KEY (author) REFERENCES user (id)
-
-);
-
 -- user + channel son pk composta (per això no cal posar not null)
 CREATE TABLE user_subscribed_channels
 (
@@ -59,7 +58,7 @@ CREATE TABLE user_subscribed_channels
     channel INT,
     CONSTRAINT pk_user_subscribed_channels PRIMARY KEY (user, channel),
     CONSTRAINT fk_user_subscribed_channels_user FOREIGN KEY (user) REFERENCES user (id),
-    CONSTRAINT fk_user_subscribed_channels_channel FOREIGN KEY (channel) REFERENCES channel (id)
+    CONSTRAINT fk_user_subscribed_channels_channel FOREIGN KEY (channel) REFERENCES user (channel_id)
 );
 
 -- Com que user + video és pk composta, cada combinació user + vídeo serà única i per tant cada usuari només podrà donar like/dislike un cop a cada vídeo i de manera excloent
