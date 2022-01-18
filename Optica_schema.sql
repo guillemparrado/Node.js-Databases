@@ -39,34 +39,6 @@ CREATE TABLE provider
     CONSTRAINT fk_provider_address FOREIGN KEY (address) REFERENCES address (id)
 );
 
-CREATE TABLE brand
-(
-    id       INT PRIMARY KEY AUTO_INCREMENT,
-    name     VARCHAR(30) NOT NULL,
-    provider INT         NOT NULL,
-    CONSTRAINT fk_brand_provider FOREIGN KEY (provider) REFERENCES provider (id)
-);
-
-
-/*
-Observacions:
-    - La marca la resolc amb FK a una altra taula per fer FK a provider de manera que brand <-> provider sigui many-to-one.
-    - glass_color = NULL per ulleres no tintades
-*/
-CREATE TABLE glasses
-(
-    id               INT PRIMARY KEY AUTO_INCREMENT,
-    brand            INT                                  NOT NULL,
-    correction_right FLOAT                                NOT NULL,
-    correction_left  FLOAT                                NOT NULL,
-    mount_type       ENUM ('rimless', 'plastic', 'metal') NOT NULL,
-    mount_color      VARCHAR(30)                          NOT NULL,
-    glass_color      VARCHAR(30),
-    price            DECIMAL(5, 2)                        NOT NULL,
-    CONSTRAINT fk_glasses_brand FOREIGN KEY (brand) REFERENCES brand (id)
-);
-
-
 /*
 Observacions:
     - Hi ha molts camps sense "not null" perquè no té sentit que s'obligui als clients a donar dades, ja que si un client no les vol donar, no té sentit perdre la venda.
@@ -96,18 +68,36 @@ CREATE TABLE employee
     name VARCHAR(30) NOT NULL
 );
 
-/*
- Observacions:
-    - Pot passar que es doni una venta a un client no registrat, perquè davant del fet que un client no vulgui donar les dades no té sentit perdre la venda.
- */
-CREATE TABLE sale
+CREATE TABLE brand_provider
 (
-    id        INT PRIMARY KEY AUTO_INCREMENT,
-    glasses   INT  NOT NULL,
-    employee  INT  NOT NULL,
-    client    INT,
-    sale_date DATE NOT NULL,
-    CONSTRAINT fk_sale_glasses FOREIGN KEY (glasses) REFERENCES glasses (id),
-    CONSTRAINT fk_sale_employee FOREIGN KEY (employee) REFERENCES employee (id),
-    CONSTRAINT fk_sale_client FOREIGN KEY (client) REFERENCES client (id)
+    brand    VARCHAR(30) PRIMARY KEY,
+    provider INT NOT NULL,
+    CONSTRAINT fk_brand_provider FOREIGN KEY (provider) REFERENCES provider (id)
 );
+
+/*
+Observacions:
+    - La marca la resolc amb FK a una altra taula per fer FK a provider de manera que brand <-> provider sigui many-to-one.
+    - glass_color = NULL per ulleres no tintades
+    - Pot passar que es doni una venta a un client no registrat, perquè davant del fet que un client no vulgui donar les dades no té sentit perdre la venda.
+    - A partir del merge de sale i glasses, caldrà poder reflectir la situació en què tenum ulleres en stock, per tant ulleres existeixen però no estan venudes == sale_employee, sale_client i sale_date hauran de poder ser nuls.
+*/
+
+CREATE TABLE glasses_sale
+(
+    id               INT PRIMARY KEY AUTO_INCREMENT,
+    brand            VARCHAR(30)                          NOT NULL,
+    correction_right FLOAT                                NOT NULL,
+    correction_left  FLOAT                                NOT NULL,
+    mount_type       ENUM ('rimless', 'plastic', 'metal') NOT NULL,
+    mount_color      VARCHAR(30)                          NOT NULL,
+    glass_color      VARCHAR(30),
+    price            DECIMAL(5, 2)                        NOT NULL,
+    sale_employee    INT,
+    sale_client      INT,
+    sale_date        DATE,
+    CONSTRAINT fk_glasses_sale_employee FOREIGN KEY (sale_employee) REFERENCES employee (id),
+    CONSTRAINT fk_glasses_sale_client FOREIGN KEY (sale_client) REFERENCES client (id),
+    CONSTRAINT fk_glasses_sale_brand_provider FOREIGN KEY (brand) REFERENCES brand_provider (brand)
+);
+
