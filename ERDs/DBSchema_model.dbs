@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MongoDb" id="Project-39d" database="MongoDb" >
+	<schema name="optica" >
+		<table name="client" >
+			<column name="_id" type="oid" jt="-8" />
+			<column name="email" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="phone_number" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="registration_date" type="date" jt="91" mandatory="y" />
+			<column name="referred_by" type="oid" jt="-8" mandatory="y" />
+			<column name="address" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="street" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="num" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="flat" type="string" jt="12" />
+				<column name="door" type="string" jt="12" />
+				<column name="city" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="postal_code" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="country" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			</column>
+			<fk name="Virtual Relation" virtual="y" to_schema="optica" to_table="client" />
+			<fk name="fk_client_client" virtual="y" to_schema="optica" to_table="client" >
+				<fk_column name="referred_by" pk="_id" />
+			</fk>
+		</table>
+		<table name="glasses" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="correction_right" type="double" length="800" decimal="0" jt="8" mandatory="y" />
+			<column name="correction_left" type="double" length="800" decimal="0" jt="8" mandatory="y" />
+			<column name="mount_type" type="enum" jt="12" mandatory="y" />
+			<column name="mount_color" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="glass_color" type="string" jt="12" />
+			<column name="price" type="double" length="800" decimal="0" jt="8" mandatory="y" />
+			<column name="brand" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="provider_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			</column>
+			<column name="sale" type="object" length="800" decimal="0" jt="4999544" >
+				<column name="client_id" type="oid" jt="-8" mandatory="y" />
+				<column name="employee" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="date" type="date" jt="91" mandatory="y" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="Virtual Relation" virtual="y" to_schema="optica" to_table="provider" >
+				<fk_column name="brand.provider_id" pk="_id" />
+			</fk>
+			<fk name="Fk_glasses_client" virtual="y" to_schema="optica" to_table="client" >
+				<fk_column name="sale.client_id" pk="_id" />
+			</fk>
+		</table>
+		<table name="provider" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="nif" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="phone_number" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="fax_number" type="string" jt="12" />
+			<column name="address" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="street" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="num" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="flat" type="string" jt="12" />
+				<column name="door" type="string" jt="12" />
+				<column name="city" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="postal_code" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="country" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+	</schema>
+	<schema name="pizzeria" >
+		<table name="client" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="surnames" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="phone_number" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="address" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="postal_code" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="locality" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="province" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+					<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+					<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="employee" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="surnames" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="nif" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="phone_number" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="job_description" type="enum" jt="12" mandatory="y" />
+			<column name="store_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="Virtual Relation" virtual="y" to_schema="pizzeria" to_table="store" >
+				<fk_column name="store_id" pk="_id" />
+			</fk>
+		</table>
+		<table name="product" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="type" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="pizza_category" type="object" length="800" decimal="0" jt="4999544" >
+					<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+					<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+			</column>
+			<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="description" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="image" type="bindata" jt="2004" mandatory="y" />
+			<column name="price" type="double" length="800" decimal="0" jt="8" mandatory="y" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="sale" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="client_id" type="oid" jt="-8" />
+			<column name="dt" prior="datetime" type="timestamp" jt="93" mandatory="y" />
+			<column name="total_price" type="double" length="800" decimal="0" jt="8" mandatory="y" />
+			<column name="store_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="delivery" type="object" jt="4999544" >
+				<column name="employee_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="dt" type="timestamp" jt="93" mandatory="y" />
+			</column>
+			<column name="items" type="array[object]" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="product_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="quantity" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="line_price" type="double" length="800" decimal="0" jt="8" mandatory="y" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="Virtual Relation" virtual="y" to_schema="pizzeria" to_table="client" >
+				<fk_column name="client_id" pk="_id" />
+			</fk>
+			<fk name="Virtual Relation" virtual="y" to_schema="pizzeria" to_table="employee" >
+				<fk_column name="delivery.employee_id" pk="_id" />
+			</fk>
+			<fk name="Virtual Relation" virtual="y" to_schema="pizzeria" to_table="product" >
+				<fk_column name="items.product_id" pk="_id" />
+			</fk>
+			<fk name="Virtual Relation" virtual="y" to_schema="pizzeria" to_table="store" >
+				<fk_column name="store_id" pk="_id" />
+			</fk>
+		</table>
+		<table name="store" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="address" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="postal_code" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="locality" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="province" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+					<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+					<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+	</schema>
+	<schema name="spotify" >
+		<table name="artist" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="image" type="bindata" jt="2004" mandatory="y" />
+			<column name="albums" type="array[object]" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="title" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="year_published" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="cover_image" type="bindata" jt="2004" mandatory="y" />
+				<column name="songs" type="array[object]" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+					<column name="title" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					<column name="length_in_seconds" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+					<column name="times_played" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+				</column>
+			</column>
+			<column name="related_artists" type="array[int]" jt="4999545" mandatory="y" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="fk_artist_artist" virtual="y" to_schema="spotify" to_table="artist" >
+				<fk_column name="related_artists" pk="_id" />
+			</fk>
+		</table>
+		<table name="user" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="email" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="password" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="username" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="birthdate" type="date" jt="91" mandatory="y" />
+			<column name="gender" type="enum" jt="12" mandatory="y" />
+			<column name="country" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="postal_code" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="subscription" type="object" length="800" decimal="0" jt="4999544" >
+				<column name="starting_date" type="date" jt="91" mandatory="y" />
+				<column name="renewal_date" type="date" jt="91" mandatory="y" />
+				<column name="payment_method" type="object" jt="4999544" mandatory="y" >
+					<column name="type" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					<column name="card_number" type="string" length="800" decimal="0" jt="12" />
+					<column name="caducity_month" type="int" length="800" decimal="0" jt="4" />
+					<column name="caducity_year" type="int" length="800" decimal="0" jt="4" />
+					<column name="security_code" type="int" length="800" decimal="0" jt="4" />
+					<column name="username" type="string" length="800" decimal="0" jt="12" />
+				</column>
+				<column name="invoices" type="array[object]" jt="4999545" mandatory="y" >
+					<column name="invoice_id" type="int" jt="4" mandatory="y" />
+					<column name="date" type="date" jt="91" mandatory="y" />
+					<column name="total" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+			</column>
+			<column name="followed_artists" type="array[int]" jt="4999545" mandatory="y" />
+			<column name="favorite_albums" type="array[int]" jt="4999545" mandatory="y" />
+			<column name="favorite_songs" type="array[int]" jt="4999545" />
+			<column name="playlists" type="array[object]" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="title" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="num_of_songs" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="creation_date" type="date" jt="91" mandatory="y" />
+				<column name="deleted_on" type="date" jt="91" />
+				<column name="songs" type="array[object]" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="song_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+					<column name="added_by_user" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+					<column name="added_on_date" type="date" jt="91" mandatory="y" />
+				</column>
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="Virtual Relation" virtual="y" to_schema="spotify" to_table="user" >
+				<fk_column name="playlists.songs.added_by_user" pk="_id" />
+			</fk>
+			<fk name="Fk_user_artist_0" virtual="y" to_schema="spotify" to_table="artist" >
+				<fk_column name="favorite_songs" pk="albums.songs._id" />
+			</fk>
+			<fk name="Fk_user_artist_1" virtual="y" to_schema="spotify" to_table="artist" >
+				<fk_column name="favorite_albums" pk="albums._id" />
+			</fk>
+			<fk name="Fk_user_artist_2" virtual="y" to_schema="spotify" to_table="artist" >
+				<fk_column name="followed_artists" pk="_id" />
+			</fk>
+			<fk name="Fk_user_artist" virtual="y" to_schema="spotify" to_table="artist" >
+				<fk_column name="playlists.songs.song_id" pk="albums.songs._id" />
+			</fk>
+		</table>
+	</schema>
+	<schema name="youtube" >
+		<table name="playlist" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="author" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="creation_date" type="date" jt="91" mandatory="y" />
+			<column name="state" type="enum" jt="12" mandatory="y" />
+			<column name="videos" type="array[int]" jt="4999545" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="Virtual Relation" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="author" pk="_id" />
+			</fk>
+			<fk name="Fk_playlist_video" virtual="y" to_schema="youtube" to_table="video" >
+				<fk_column name="videos" pk="_id" />
+			</fk>
+		</table>
+		<table name="user" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="email" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="password" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="username" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="date_of_birth" type="date" jt="91" mandatory="y" />
+			<column name="gender" type="enum" jt="12" mandatory="y" />
+			<column name="country" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="postal_code" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="channel" type="object" length="800" decimal="0" jt="4999544" >
+				<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="description" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="creation_date" type="date" jt="91" mandatory="y" />
+				<column name="subscribed_users" type="array" jt="4999545" />
+			</column>
+			<column name="subscribed_channels" type="array[int]" jt="4999545" />
+			<column name="published_playlists" type="array[int]" jt="4999545" />
+			<column name="subscribed_playlists" type="array[int]" jt="4999545" />
+			<column name="published_videos" type="array[int]" jt="4999545" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="Virtual Relation" virtual="y" to_schema="youtube" to_table="user" />
+			<fk name="fk_user_user" virtual="y" to_schema="youtube" to_table="playlist" >
+				<fk_column name="published_playlists" pk="_id" />
+			</fk>
+			<fk name="fk_user_playlist" virtual="y" to_schema="youtube" to_table="playlist" >
+				<fk_column name="subscribed_playlists" pk="_id" />
+			</fk>
+			<fk name="Fk_user_video" virtual="y" to_schema="youtube" to_table="video" >
+				<fk_column name="published_videos" pk="_id" />
+			</fk>
+			<fk name="Fk_user_user_0" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="subscribed_channels" pk="channel._id" />
+			</fk>
+			<fk name="Fk_user_user_1" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="channel.subscribed_users" pk="_id" />
+			</fk>
+		</table>
+		<table name="video" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+			<column name="publishing" type="object" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="author" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="dt" type="timestamp" jt="93" mandatory="y" />
+			</column>
+			<column name="title" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="description" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="size_in_bytes" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+			<column name="filename" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="duration_in_seconds" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+			<column name="thumbnail" type="bindata" jt="2004" mandatory="y" />
+			<column name="views" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+			<column name="total_likes" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+			<column name="total_dislikes" type="int" length="800" decimal="0" jt="4" mandatory="y" />
+			<column name="likes_dislikes" type="array[object]" jt="4999545" >
+				<column name="user_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="like" type="boolean" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="dt" type="timestamp" jt="93" mandatory="y" />
+			</column>
+			<column name="state" type="enum" jt="12" mandatory="y" />
+			<column name="tags" type="array[object]" jt="4999545" >
+				<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="name" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			</column>
+			<column name="comments" type="array[object]" jt="4999545" >
+				<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="author_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+				<column name="comment_text" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="likes_dislikes" type="array[object]" jt="4999545" >
+					<column name="author_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" />
+					<column name="like" type="boolean" length="800" decimal="0" jt="12" mandatory="y" />
+					<column name="dt" type="timestamp" jt="93" mandatory="y" />
+				</column>
+				<column name="dt" type="timestamp" jt="93" mandatory="y" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+			<fk name="Virtual Relation" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="publishing.author" pk="_id" />
+			</fk>
+			<fk name="Virtual Relation" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="likes_dislikes.user_id" pk="_id" />
+			</fk>
+			<fk name="Virtual Relation" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="comments.author_id" pk="_id" />
+			</fk>
+			<fk name="Virtual Relation" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="comments.likes_dislikes.author_id" pk="_id" />
+			</fk>
+			<fk name="Fk_video_user" virtual="y" to_schema="youtube" to_table="user" >
+				<fk_column name="comments.author_id" pk="_id" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="MongoDb" database="MongoDb" driver_class="com.dbschema.MongoJdbcDriver" driver_jar="mongojdbc3.1.jar" driver_desc="No Authentication" host="localhost" port="27017" user="admin" />
+	<layout name="Optica" id="Layout-55b" joined_routing="y" show_column_type="y" show_schema_name="y" show_relation="columns" >
+		<comment><![CDATA[Optica]]></comment>
+		<entity schema="optica" name="client" column="address" color="BED3F4" x="112" y="432" />
+		<entity schema="optica" name="provider" column="address" color="F4DDBE" x="640" y="416" />
+		<entity schema="optica" name="glasses" column="brand" color="C7F4BE" x="400" y="464" />
+		<entity schema="optica" name="client" color="BED3F4" x="80" y="256" />
+		<entity schema="optica" name="glasses" color="C7F4BE" x="352" y="256" />
+		<entity schema="optica" name="provider" color="F4DDBE" x="624" y="256" />
+		<entity schema="optica" name="glasses" column="sale" color="C7F4BE" x="400" y="560" />
+		<callout x="48" y="80" pointer="SV" >
+			<comment><![CDATA[Comentaris: 
+- La creueta mínima que hi ha davant d'alguns camps significa 'not null'.
+- El programa dibuixa els objectes encastats de manera relacional, però alhora dibuixa tots aquells que formen part d'una 
+   mateixa col·lecció dins d'un mateix package.
+- Per fer-ho més clar també he inclòs la ruta des de la base de dades a l'objecte arrel de les col·leccions ('optica.provider',
+   'optica.glasses'....)]]></comment>
+		</callout>
+		<group name="Collection &#039;provider&#039;" color="F7F2EC" >
+			<entity schema="optica" name="provider" column="address" />
+			<entity schema="optica" name="provider" />
+		</group>
+		<group name="Collection &#039;client&#039;" color="ECF0F7" >
+			<entity schema="optica" name="client" column="address" />
+			<entity schema="optica" name="client" />
+		</group>
+		<group name="Collection &#039;glasses&#039;" color="EEF7EC" >
+			<entity schema="optica" name="glasses" column="brand" />
+			<entity schema="optica" name="glasses" />
+			<entity schema="optica" name="glasses" column="sale" />
+		</group>
+	</layout>
+	<layout name="Pizzeria" id="Layout-24e6" joined_routing="y" show_column_type="y" show_schema_name="y" show_relation="columns" >
+		<comment><![CDATA[Pizzeria]]></comment>
+		<entity schema="pizzeria" name="client" color="F4DDBE" x="608" y="192" />
+		<entity schema="pizzeria" name="sale" column="delivery" color="C7F4BE" x="368" y="256" />
+		<entity schema="pizzeria" name="employee" color="BEBEF4" x="48" y="80" />
+		<entity schema="pizzeria" name="sale" column="items" color="C7F4BE" x="352" y="352" />
+		<entity schema="pizzeria" name="store" column="locality" color="D1BEF4" x="64" y="464" />
+		<entity schema="pizzeria" name="client" column="locality" color="F4DDBE" x="640" y="368" />
+		<entity schema="pizzeria" name="product" column="type.pizza_category" color="BED3F4" x="944" y="352" />
+		<entity schema="pizzeria" name="product" color="BED3F4" x="880" y="96" />
+		<entity schema="pizzeria" name="store" column="locality.province" color="D1BEF4" x="80" y="576" />
+		<entity schema="pizzeria" name="client" column="locality.province" color="F4DDBE" x="672" y="480" />
+		<entity schema="pizzeria" name="sale" color="C7F4BE" x="336" y="80" />
+		<entity schema="pizzeria" name="store" color="D1BEF4" x="48" y="336" />
+		<entity schema="pizzeria" name="product" column="type" color="BED3F4" x="880" y="256" />
+		<group name="Collection &#039;employee&#039;" color="ECECF7" >
+			<entity schema="pizzeria" name="employee" />
+		</group>
+		<group name="Collection &#039;client&#039;" color="F7F2EC" >
+			<entity schema="pizzeria" name="client" />
+			<entity schema="pizzeria" name="client" column="locality" />
+			<entity schema="pizzeria" name="client" column="locality.province" />
+		</group>
+		<group name="Collection &#039;product&#039;" color="ECF0F7" >
+			<entity schema="pizzeria" name="product" column="type" />
+			<entity schema="pizzeria" name="product" column="type.pizza_category" />
+			<entity schema="pizzeria" name="product" />
+		</group>
+		<group name="Collection &#039;store&#039;" color="F0ECF7" >
+			<entity schema="pizzeria" name="store" column="locality" />
+			<entity schema="pizzeria" name="store" column="locality.province" />
+			<entity schema="pizzeria" name="store" />
+		</group>
+		<group name="Collection &#039;sale&#039;" color="EEF7EC" >
+			<entity schema="pizzeria" name="sale" column="delivery" />
+			<entity schema="pizzeria" name="sale" column="items" />
+			<entity schema="pizzeria" name="sale" />
+		</group>
+	</layout>
+	<layout name="Spotify" id="Layout-aba" joined_routing="y" show_column_type="y" show_schema_name="y" show_relation="columns" >
+		<comment><![CDATA[Spotify]]></comment>
+		<entity schema="spotify" name="artist" column="albums" color="BED3F4" x="64" y="240" />
+		<entity schema="spotify" name="artist" color="BED3F4" x="48" y="80" />
+		<entity schema="spotify" name="user" column="subscription.invoices" color="C7F4BE" x="880" y="240" />
+		<entity schema="spotify" name="user" column="subscription.payment_method" color="C7F4BE" x="880" y="80" />
+		<entity schema="spotify" name="user" column="playlists" color="C7F4BE" x="656" y="208" />
+		<entity schema="spotify" name="artist" column="albums.songs" color="BED3F4" x="64" y="400" />
+		<entity schema="spotify" name="user" column="playlists.songs" color="C7F4BE" x="880" y="368" />
+		<entity schema="spotify" name="user" column="subscription" color="C7F4BE" x="656" y="80" />
+		<entity schema="spotify" name="user" color="C7F4BE" x="400" y="80" />
+		<group name="Collection &#039;artist&#039;" color="ECF0F7" >
+			<entity schema="spotify" name="artist" />
+			<entity schema="spotify" name="artist" column="albums" />
+			<entity schema="spotify" name="artist" column="albums.songs" />
+		</group>
+		<group name="Collection &#039;user&#039;" color="EEF7EC" >
+			<entity schema="spotify" name="user" column="subscription.payment_method" />
+			<entity schema="spotify" name="user" column="subscription.invoices" />
+			<entity schema="spotify" name="user" column="playlists" />
+			<entity schema="spotify" name="user" column="subscription" />
+			<entity schema="spotify" name="user" column="playlists.songs" />
+			<entity schema="spotify" name="user" />
+		</group>
+	</layout>
+	<layout name="Youtube" id="Layout-1ea" joined_routing="y" show_column_type="y" show_schema_name="y" show_relation="columns" >
+		<comment><![CDATA[Youtube]]></comment>
+		<entity schema="youtube" name="user" column="channel" color="BED3F4" x="96" y="368" />
+		<entity schema="youtube" name="video" column="comments" color="C7F4BE" x="688" y="384" />
+		<entity schema="youtube" name="video" column="comments.likes_dislikes" color="C7F4BE" x="928" y="416" />
+		<entity schema="youtube" name="video" column="likes_dislikes" color="C7F4BE" x="928" y="192" />
+		<entity schema="youtube" name="playlist" color="F4DDBE" x="432" y="352" />
+		<entity schema="youtube" name="video" column="publishing" color="C7F4BE" x="928" y="96" />
+		<entity schema="youtube" name="video" column="tags" color="C7F4BE" x="928" y="304" />
+		<entity schema="youtube" name="user" color="BED3F4" x="48" y="80" />
+		<entity schema="youtube" name="video" color="C7F4BE" x="688" y="80" />
+		<group name="Collection &#039;playlist&#039;" color="F7F2EC" >
+			<entity schema="youtube" name="playlist" />
+		</group>
+		<group name="Collection &#039;user&#039;" color="ECF0F7" >
+			<entity schema="youtube" name="user" />
+			<entity schema="youtube" name="user" column="channel" />
+		</group>
+		<group name="Collection &#039;video&#039;" color="EEF7EC" >
+			<entity schema="youtube" name="video" column="comments.likes_dislikes" />
+			<entity schema="youtube" name="video" column="tags" />
+			<entity schema="youtube" name="video" column="likes_dislikes" />
+			<entity schema="youtube" name="video" column="publishing" />
+			<entity schema="youtube" name="video" column="comments" />
+			<entity schema="youtube" name="video" />
+		</group>
+	</layout>
+</project>
