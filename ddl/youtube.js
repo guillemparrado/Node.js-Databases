@@ -46,7 +46,7 @@ const users = [
         _id: user_ids[1],
         email: 'some_other@email.com',
         password: 'sfldknr243l23n4sdfk2j322lk',
-        name: 'Jawed Karim',
+        username: 'Jawed Karim',
         date_of_birth: '1985-05-07',
         gender: 'male',
         country: 'USA',
