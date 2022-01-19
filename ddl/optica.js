@@ -31,15 +31,15 @@ const clients = [
         email: 'some@email.com',
         name: 'Lluïsa Capdevila',
         phone_number: '555-555-555',
-        registration: '2019-05-23',
+        registration_date: '2019-05-23',
         referred_by: null,
         address: {
             street: 'Gran Via',
             num: '221b',
-            flat: 1,
-            door: 4,
+            flat: '1',
+            door: '4',
             city: 'Sant Esteve de les Roures',
-            postal_code: 12345,
+            postal_code: '12345',
             country: 'España'
         }
     },
@@ -48,15 +48,15 @@ const clients = [
         email: 'some_other@email.com',
         name: 'Aniol Gutiérrez',
         phone_number: '666-666-666',
-        registration: '2020-01-12',
+        registration_date: '2020-01-12',
         referred_by: client_ids[0],
         address: {
             street: 'Gran Via',
             num: '221b',
-            flat: 1,
-            door: 4,
+            flat: '1',
+            door: '4',
             city: 'Sant Esteve de les Roures',
-            postal_code: 12345,
+            postal_code: '12345',
             country: 'España'
         }
     }
@@ -74,10 +74,10 @@ const providers = [
         address: {
             street: 'Paseo Castellana',
             num: '89',
-            flat: 11,
+            flat: '11',
             door: null,
             city: 'Madrid',
-            postal_code: 28056,
+            postal_code: '28056',
             country: 'España'
         }
     },
@@ -89,11 +89,11 @@ const providers = [
         fax_number: '918463425',
         address: {
             street: 'AVENIDA DE LOS REYES (PG IND LA MINA)',
-            num: null,
+            num: 'S/N',
             flat: null,
             door: null,
             city: 'Colmenar Viejo',
-            postal_code: 28770,
+            postal_code: '28770',
             country: 'España'
         }
     }

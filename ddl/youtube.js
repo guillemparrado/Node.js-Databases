@@ -6,7 +6,6 @@ db.dropDatabase()
 
 // CREATE COLLECTIONS
 db.createCollection('user');
-db.createCollection('tag');
 db.createCollection('video');
 db.createCollection('playlist');
 
@@ -55,7 +54,7 @@ const users = [
         // Guardo els usuaris que s'han subscrit també aquí (navegació bidireccional, usuari -> canals a què subscrit però també canal -> usuaris subscrits) per poder gestionar l'enviament de notificacions des del canal als subscriptors sense haver de consultar a tota la base de dades de Youtube de billons d'usuaris per saber quins estan subscrits al canal cada cop que es vulgui enviar l'inici d'un broadcasting per exemple
         // Com que només pot haver-hi un canal per usuari, té sentit assignar-li la mateixa id que a l'usuari per assegurar que sigui única
         channel: {
-            id: user_ids[1],
+            _id: user_ids[1],
             name: 'Youtube founders',
             description: 'Official channel from the founders of youtube',
             creation_date: '2007-03-21',
@@ -74,27 +73,13 @@ const users = [
     }
 ];
 
-// No cal id diferent de la de mongo
-const tags = [
-    {
-        _id: tag_ids[0],
-        name: 'First'
-    }, {
-        _id: tag_ids[1],
-        name: 'Jawed Karim'
-    }, {
-        _id: tag_ids[2],
-        name: 'Zoo'
-    },
-];
-
 // Altre cop, no cal que l'id del video sigui diferent que el que li doni mongo per defecte
 const videos = [
     {
         _id: video_ids[0],
         publishing: {
             author: user_ids[1],
-            datetime: '2005-04.23 15:14:37'
+            dt: '2005-04.23 15:14:37'
         },
         title: 'Me at the zoo',
         description: 'This is the very first video uploaded to the YouTube Server',
@@ -110,26 +95,37 @@ const videos = [
             {
                 user_id: user_ids[0],
                 like: true,
-                datetime: '2021-08-12 13:32:05'
+                dt: '2021-08-12 13:32:05'
             }
         ],
         state: 'public',  //Estats possibles: public, ocult, privat
-        // RAONAMENT DE TAGS: per una banda han de tenir id únic, això vol dir que per cada nou vídeo s'ha de comprovar per tots els tags que se li afegeixin si el tag ja existeix a qualsevol altre vídeo de tot youtube == cal una colecció de tags. Per altra banda, per la poca informació que contenen i la gran quantitat que en pot haver penso que és millor tenir-los encastats que accedir-hi per referència, encara que això signifiqui replicar informació. A nivell d'aplicació, cada cop que es crei un vídeo, pels tags preexistents que es facin servir caldrà recuperar la seva id a la colecció de tags i pels nous que es crein aldrà afegir-los a la col·lecció en actualitzar les dades del vídeo amb els nous tags encastats.
-        tags: tags,
+        // RESOLT PER TAGS: els índex poden ser sobre camps únics, per resoldre nom >> id del tag indexo els tags per nom dins de video i ja no cal col·lecció de tags
+        tags: [
+            {
+                _id: tag_ids[0],
+                name: 'First'
+            }, {
+                _id: tag_ids[1],
+                name: 'Jawed Karim'
+            }, {
+                _id: tag_ids[2],
+                name: 'Zoo'
+            },
+        ],
 
         // Guardo state i comments de manera independent perquè, tot i que els vídeos privats no poden rebre comentaris, si un usuari passa el vídeo a privat, que no es perdin els comentaris (i puguin tornar a ser visibles si el torna a fer públic per exemple)
         // Torno a fer servir id de Mongo perquè siguin úniques i poder-les generar sense un servei central
         comments: [
             {
-                id: ObjectId(),
-                datetime: '2011-03-05 18:30:11',
+                _id: ObjectId(),
+                dt: '2011-03-05 18:30:11',
                 author_id: user_ids[0],     //(Autor del comentari)
                 comment_text: 'dfgwt dhejhew wthrwe!',
                 // Altre cop, true/false per like/dislike, no existència de registre per un usuari per falta de like o dislike
                 likes_dislikes: [
                     {
                         author_id: user_ids[1],     //(Autor del like/dislike)
-                        datetime: '2011-03-05 18:35:06',
+                        dt: '2011-03-05 18:35:06',
                         like: true
                     }
                 ]
@@ -157,13 +153,11 @@ const playlists = [
 // INSERTS
 
 db.user.insertMany(users);
-db.tag.insertMany(tags);
 db.video.insertMany(videos);
 db.playlist.insertMany(playlists);
 
 // INDEXES
-// Faig un índex pels _id dels comments per poder-los trobar sense haver de consultar tota la base de dades
+// Faig un índexs per poder trobar ids sense haver de consultar tots els documents de la base de dades
 // Font: https://docs.mongodb.com/manual/indexes/
-db.video.createIndex({'comments.id': 1});
-
-// DUBTE: per 'tags' podria haver creat un índex en comptes d'una col·lecció a part? Diria que no perquè s'han de poden repetir en diferents documents... (?)
+db.video.createIndex({'comments._id': 1});
+db.video.createIndex({'tags._id': 1});

@@ -17,19 +17,29 @@ db.createCollection('sale');
 // OBSERVACIÓ: modelo localitat i província com documents encastats, ja que localitat i província necessiten id i nom (el valor serà un objecte i no un string per exemple amb el nom només) i que un client només pot pertànyer a una localitat i al seu torn una localitat només pot pertànyer a una província.
 // OBSERVACIÓ: per a l'id, com que després sale hi fa referència també l'hauria d'indexar, al final he pensat que si 'id' acaba sent el mateix que _id es torna redundant: decideixo fer servir només _id i donar-li sentit de negoci.
 
+const client_ids = [ObjectId(), ObjectId()];
+const store_ids = [ObjectId(), ObjectId()];
+const locality_ids = [ObjectId(), ObjectId()];
+const province_ids = [ObjectId(), ObjectId()];
+const employee_ids = [ObjectId(), ObjectId()];
+const product_ids = [ObjectId(), ObjectId(), ObjectId(), ObjectId(), ObjectId()];
+const pizza_category_ids = [ObjectId(), ObjectId()];
+const sale_ids = [ObjectId(), ObjectId()];
+
+
 const clients = [
     {
-        _id: 1,
+        _id: client_ids[0],
         name: 'Omar',
         surnames: 'Olmedo Ferrer',
         phone_number: '555-555-555',
         address: 'Gran Via 123',
         postal_code: '08080',
         locality: {
-            id: 1,
+            _id: locality_ids[0],
             name:'Barcelona',
             province: {
-                id: 1,
+                _id: locality_ids[0],
                 name: 'Barcelona'
             }
         },
@@ -38,26 +48,26 @@ const clients = [
 
 const stores = [
     {
-        _id: 1,
+        _id: store_ids[0],
         address: 'Torrent de la vil·la 12',
         postal_code: '08080',
         locality: {
-            id: 1,
+            _id: locality_ids[0],
             name:'Barcelona',
             province: {
-                id: 1,
+                _id: province_ids[0],
                 name: 'Barcelona'
             }
         },
     }, {
-        _id: 2,
+        _id: store_ids[1],
         address: 'Carrer de la fàbrica 123',
         postal_code: '08202',
         locality: {
-            id: 1,
+            _id: locality_ids[1],
             name:'Sabadell',
             province: {
-                id: 1,
+                _id: province_ids[0],
                 name: 'Barcelona'
             }
         },
@@ -66,21 +76,21 @@ const stores = [
 
 const employees = [
     {
-        _id: 1,
+        _id: employee_ids[0],
         name: 'Agustí',
         surnames: 'Pérez Simó',
         nif: '12345678X',
         phone_number: '555-555-555',
         job_description: 'cooker',
-        store_id: 1,
+        store_id: store_ids[0],
     }, {
-        _id: 2,
+        _id: employee_ids[1],
         name: 'Sònia',
         surnames: 'Domínguez Guatlla',
         nif: '98765432X',
         phone_number: '666-666-666',
         job_description: 'delivery',
-        store_id: 1,
+        store_id: store_ids[0],
     }
 ];
 
@@ -92,11 +102,11 @@ const employees = [
 const products = [
 
     {
-        _id: 1,
+        _id: product_ids[0],
         type: {
             name: 'pizza',
-            category: {
-                id: 1,
+            pizza_category: {
+                _id: pizza_category_ids[0],
                 name: 'Clàssica'
             }
         },
@@ -106,11 +116,11 @@ const products = [
         price: 14.25,
     },
     {
-        _id: 2,
+        _id: product_ids[1],
         type: {
             name: 'pizza',
-            category: {
-                id: 2,
+            pizza_category: {
+                _id: pizza_category_ids[1],
                 name: 'Deluxe'
             }
         },
@@ -120,7 +130,7 @@ const products = [
         price: 21.75
     },
     {
-        _id: 3,
+        _id: product_ids[2],
         type: {
             name: 'beverage'
         },
@@ -129,7 +139,7 @@ const products = [
         image: 'TLdnH2ATSTl68YkTyMJwPLnGbz1xxKgLuJP...NeUWOUVIkfj/+dveHT+tUutfdtWVqr7fma5xHX9Ns1==',
         price: 1
     },{
-        _id: 4,
+        _id: product_ids[3],
         type: {
             name: 'beverage'
         },
@@ -138,7 +148,7 @@ const products = [
         image: 'TLdnH2ATSTl68YkTyMJwPLnGbz1xxKgLuJP...NeUWOUVIkfj/+dveHT+tUutfdtWVqr7fma5xHX9Ns1==',
         price: 1.5
     },{
-        _id: 5,
+        _id: product_ids[4],
         type: {
             name: 'beverage'
         },
@@ -155,23 +165,23 @@ const products = [
 const sales = [
     // Sale d'una pizza carbonara i una cervesa a botiga barcelona, entrega a domicili efectuada per l'empleada 2
     {
-        _id: 1,
-        client_id: 1,
-        datetime: '2020-01-01 20:15',
+        _id: sale_ids[0],
+        client_id: client_ids[0],
+        dt: '2020-01-01 20:15',
         total_price: 15.75,
-        store_id: 1,
+        store_id: store_ids[0],
         delivery: {
-            employee_id: 2,
-            datetime: '2020-01-01 20:45',
+            employee_id: employee_ids[1],
+            dt: '2020-01-01 20:45',
         },
-        sale_lines: [
+        items: [
             {
-                product_id: 1,
+                product_id: product_ids[0],
                 quantity: 1,
                 line_price: 14.25
             },
             {
-                product_id: 5,
+                product_id: product_ids[4],
                 quantity: 1,
                 line_price: 1.5
             },
@@ -179,15 +189,15 @@ const sales = [
     },
     // Sale de 6 Coca-coles a botiga barcelona, entrega a botiga
     {
-        _id: 2,
+        _id: sale_ids[1],
         client_id: null,
-        datetime: '2021-01-03 18:12',
+        dt: '2021-01-03 18:12',
         total_price: 9,
         store_id: 1,
         delivery: null,
         items: [
             {
-                product_id: 4,
+                product_id: product_ids[3],
                 quantity: 6,
                 line_price: 9
             }
@@ -202,3 +212,12 @@ db.store.insertMany(stores);
 db.employee.insertMany(employees);
 db.product.insertMany(products);
 db.sale.insertMany(sales);
+
+
+// INDEXES
+
+db.client.createIndex({'locality._id': 1})
+db.client.createIndex({'locality.province._id': 1})
+db.product.createIndex({'type.pizza_category._id': 1})
+db.store.createIndex({'locality._id': 1})
+db.store.createIndex({'locality.province._id': 1})
